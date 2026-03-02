@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BULLSHIT GENERATOR 1.5 - RESPONSIVE RETRO</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: #000;
+            color: #33ff33;
+            font-family: 'VT323', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+            text-transform: uppercase;
+        }
+
+        /* CRT Monitor effekt */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 10;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* Elrendezés wrapper */
+        .main-layout {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 40px;
+            width: 100%;
+            max-width: 1100px;
+            justify-content: center;
+        }
+
+        #reaction-container {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 5;
+            min-height: 200px;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 600px;
+            width: 100%;
+            border: 4px solid #33ff33;
+            padding: 20px;
+            background-color: #002200;
+            box-shadow: 0 0 20px rgba(51, 255, 51, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Reakciók mobil optimalizálása */
+        @media (max-width: 1000px) {
+            body { align-items: flex-start; overflow-y: auto; }
+            .main-layout { flex-direction: column; padding-top: 20px; }
+            #reaction-container { 
+                width: 100%; 
+                flex-direction: row; 
+                flex-wrap: wrap; 
+                justify-content: center;
+                order: 2; /* A szöveg után jelenjen meg mobilon */
+            }
+            .container { order: 1; }
+        }
+
+        /* Elemek stílusa */
+        h1 { text-align: center; border-bottom: 4px double #33ff33; margin-top: 0; padding-bottom: 10px; font-size: 2rem; }
+        label { display: block; margin-bottom: 10px; font-size: 1.5rem; }
+        input[type=range] { width: 100%; cursor: pointer; accent-color: #33ff33; }
+        .slider-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 5px; }
+        
+        .radio-container { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-top: 20px; 
+            border: 1px dashed #33ff33; 
+            padding: 10px; 
+        }
+
+        button { 
+            width: 100%; 
+            background-color: #33ff33; 
+            color: #000; 
+            border: none; 
+            padding: 15px; 
+            font-family: 'VT323', monospace; 
+            font-size: 1.8rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 20px; 
+        }
+
+        #output-area { 
+            margin-top: 30px; 
+            min-height: 120px; 
+            border: 2px solid #33ff33; 
+            padding: 15px; 
+            background-color: #000; 
+            font-size: 1.5rem; 
+            line-height: 1.2; 
+        }
+
+        /* Ikonok és Emailek */
+        .reaction-icon { font-size: 5rem; text-shadow: 0 0 20px #33ff33; animation: pop 0.5s ease-out; }
+        .envelope { width: 60px; height: 40px; border: 3px solid #33ff33; position: relative; animation: bounce 0.5s ease-out; }
+        .envelope::after { content: "V"; position: absolute; top: 0; left: 20px; font-size: 1.5rem; }
+        .email-box { border: 2px solid #33ff33; background: #001100; padding: 12px; font-size: 1.4rem; box-shadow: 6px 6px 0px #004400; width: 100%; animation: open 0.4s ease-out; }
+        .email-header { border-bottom: 1px solid #33ff33; font-size: 0.9rem; margin-bottom: 5px; opacity: 0.7; }
+
+        @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        @keyframes bounce { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        @keyframes open { 0% { transform: scaleY(0); } 100% { transform: scaleY(1); } }
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<div class="main-layout">
+    <div id="reaction-container"></div>
+
+    <div class="container">
+        <h1>BULLSHIT-O-MATIC 1.5</h1>
+        
+        <div class="control-group">
+            <label>ATTITŰD:</label>
+            <input type="range" id="attitude" min="0" max="100" value="50">
+            <div class="slider-labels">
+                <span>LOJÁLIS</span>
+                <span>CINIKUS</span>
+            </div>
+        </div>
+
+        <div class="radio-container">
+            <input type="checkbox" id="isBoss">
+            <label for="isBoss" style="margin:0; font-size: 1.2rem;">FELETTESNEK MONDOM</label>
+        </div>
+
+        <button onclick="startProcess()">GENERÁLÁS</button>
+
+        <div id="output-area">
+            <span id="text">VÁRAKOZÁS...</span><span class="blink">_</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const data = {
+        loyal: {
+            start: ["A stratégiai célok mentén", "A szinergiák kihasználása érdekében", "Az operatív hatékonyságot szem előtt tartva", "A roadmap prioritásait elemezve", "A vállalati vízióhoz illeszkedve"],
+            middle: ["átfogó erőforrás-optimalizálásra van szükség", "egy mélyebb hozzáadott értékű elemzést kell végeznünk", "a stakeholderek bevonásával kell finomhangolnunk a folyamatokat", "holisztikus megközelítéssel kell a problémát kezelnünk"],
+            end: ["mielőtt a megvalósítási fázisba lépünk.", "hogy maximalizáljuk a ROI-t.", "a fenntartható növekedés érdekében.", "az agilis módszertan alapelvei szerint."]
+        },
+        cynical: {
+            start: ["Ez a döglött akták tipikus esete,", "Úgy látom, megint sikerült feltalálni a spanyolviaszt,", "Ahelyett, hogy tényleges munkát végeznénk,", "Ebben a mentális mocsárban", "A kávégép mellett is megmondták,"],
+            middle: ["csak a gumicsontot rágjuk a semmiért", "éppen a fedélzeten rendezzük át a székeket a Titanic-on", "felesleges köröket futunk a bürokrácia útvesztőjében", "egy Excel-táblával próbáljuk megváltani a világot"],
+            end: ["úgyhogy hagyjuk is a fenébe.", "amihez se kedvem, se kompetenciám.", "majd szóljatok, ha van értelme is.", "inkább elmegyek táppénzre."]
+        },
+        bossModifier: {
+            cynicalReplacement: {
+                start: ["A jelenlegi kapacitáskorlátok mellett", "A feladat komplexitását mérlegelve", "Alaposabb előkészítést igényel a kérdés,", "A kockázati tényezők számbavétele után"],
+                middle: ["egy másodlagos prioritási sorrendet kell felállítanunk", "erőforrás-átcsoportosításra van szükség", "a folyamat-audit lezárultáig várnunk kell", "a döntési mechanizmusok lassítása indokolt"],
+                end: ["a minőségbiztosítási sztenderdek miatt.", "a hosszú távú stabilitás érdekében.", "hogy elkerüljük az ad-hoc hibákat.", "amint a projekt-roadmap engedi."]
+            }
+        }
+    };
+
+    const colleagueEmails = {
+        loyalReaction: [
+            { from: "Kovács J.", msg: "MÉLYEBBRE NEM AKARSZ BENYALNI? MÁR BARNA A ZAKÓD!" },
+            { from: "Nagy B.", msg: "ÁTLÁTUNK RAJTAD, PAJTI. ENNYIRE KELL A BÓNUSZ?" },
+            { from: "Kiss A.", msg: "VIGYÁZZ, A FŐNÖK CIPŐJE MÁR TÚL FÉNYES!" },
+            { from: "Varga M.", msg: "NE FELEJTS EL LEVEGŐT VENNI KÉT NYALÁS KÖZÖTT!" }
+        ],
+        cynicalReaction: [
+            { from: "Tóth L.", msg: "ZSENIÁLIS! EZT JÓL MEGKAPTA AZ ÖREG." },
+            { from: "Varga M.", msg: "VENDÉGEM VAGY EGY KÁVÉRA, SZÉP MUNKA VOLT!" },
+            { from: "H. Zoli", msg: "RESPECT! VÉGRE VALAKI KIMONDTA A TUTIT." },
+            { from: "Kata_HR", msg: "EZT A KIFOGÁST ÉN IS ELLOPOM!" }
+        ]
+    };
+
+    function startProcess() {
+        const attitude = document.getElementById('attitude').value;
+        const isBoss = document.getElementById('isBoss').checked;
+        const output = document.getElementById('text');
+        const reactionContainer = document.getElementById('reaction-container');
+        
+        reactionContainer.innerHTML = ""; 
+        let pool;
+
+        if (isBoss) {
+            pool = (attitude > 50) ? data.bossModifier.cynicalReplacement : data.loyal;
+        } else {
+            if (attitude < 40) pool = data.loyal;
+            else if (attitude > 60) pool = data.cynical;
+            else pool = {
+                start: [...data.loyal.start, ...data.cynical.start],
+                middle: [...data.loyal.middle, ...data.cynical.middle],
+                end: [...data.loyal.end, ...data.cynical.end]
+            };
+        }
+
+        const result = `${pool.start[Math.floor(Math.random() * pool.start.length)]} ${pool.middle[Math.floor(Math.random() * pool.middle.length)]} ${pool.end[Math.floor(Math.random() * pool.end.length)]}`;
+        
+        output.innerText = "";
+        let i = 0;
+        function type() {
+            if (i < result.length) {
+                output.innerText += result.charAt(i);
+                i++;
+                setTimeout(type, 15);
+            } else {
+                setTimeout(() => {
+                    if (isBoss) {
+                        triggerEmails(attitude > 50 ? "cynicalReaction" : "loyalReaction");
+                    } else {
+                        if (attitude > 60) triggerIcons("👏");
+                        else if (attitude < 40) triggerIcons("👎");
+                    }
+                }, 400);
+            }
+        }
+        type();
+    }
+
+    function triggerEmails(type) {
+        const container = document.getElementById('reaction-container');
+        const allMessages = [...colleagueEmails[type]];
+        const selected = [];
+        for (let j = 0; j < 3; j++) {
+            const index = Math.floor(Math.random() * allMessages.length);
+            selected.push(allMessages.splice(index, 1)[0]);
+        }
+        
+        selected.forEach((mail, index) => {
+            setTimeout(() => {
+                const env = document.createElement('div');
+                env.className = 'envelope';
+                container.appendChild(env);
+                setTimeout(() => {
+                    env.remove();
+                    const box = document.createElement('div');
+                    box.className = 'email-box';
+                    box.innerHTML = `<div class="email-header">MAIL: ${mail.from}</div><div>${mail.msg}</div>`;
+                    container.appendChild(box);
+                }, 600);
+            }, index * 1200);
+        });
+    }
+
+    function triggerIcons(icon) {
+        const container = document.getElementById('reaction-container');
+        for (let j = 0; j < 3; j++) {
+            setTimeout(() => {
+                const div = document.createElement('div');
+                div.className = 'reaction-icon';
+                div.innerText = icon;
+                container.appendChild(div);
+            }, j * 300);
+        }
+    }
+</script>
+
+</body>
+</html>
