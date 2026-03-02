@@ -2,8 +2,8 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BULLSHIT GENERATOR 1.6 - DISCLAIMER EDITION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BULLSHIT GENERATOR 1.7 - MOBILE FIXED</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
@@ -15,15 +15,15 @@
             font-family: 'VT323', monospace;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Mobilon jobb, ha fentről indul */
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             overflow-x: hidden;
             text-transform: uppercase;
         }
 
-        /* CRT Monitor effekt - MINDEN felett */
+        /* CRT Monitor effekt */
         body::before {
             content: " ";
             display: block;
@@ -35,25 +35,25 @@
             pointer-events: none;
         }
 
-        /* Jogi Nyilatkozat Overlay */
+        /* Jogi Nyilatkozat Overlay - JAVÍTVA: Görgethető */
         #disclaimer-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: #000;
             z-index: 500;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            display: block; /* Flex helyett block a görgetéshez */
+            overflow-y: auto;
+            padding: 20px 10px;
         }
 
         .disclaimer-content {
-            max-width: 700px;
+            margin: 0 auto;
+            max-width: 600px;
+            width: 100%;
             border: 2px solid #33ff33;
-            padding: 30px;
+            padding: 20px;
             background: #001100;
             box-shadow: 0 0 30px rgba(51, 255, 51, 0.3);
-            text-align: left;
         }
 
         .disclaimer-content h2 {
@@ -62,12 +62,13 @@
             border-bottom: 2px solid #33ff33;
             margin-top: 0;
             padding-bottom: 10px;
+            font-size: 1.5rem;
         }
 
         .disclaimer-text {
-            font-size: 1.3rem;
-            line-height: 1.4;
-            margin: 20px 0;
+            font-size: 1.1rem; /* Kicsit kisebb, hogy beférjen */
+            line-height: 1.3;
+            margin: 15px 0;
         }
 
         .accept-btn {
@@ -78,73 +79,67 @@
             border: none;
             padding: 15px;
             font-family: 'VT323', monospace;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 20px;
         }
-
-        .accept-btn:hover { background: #fff; }
 
         /* Fő elrendezés */
         .main-layout {
             display: flex;
-            flex-direction: row;
+            flex-direction: column; /* Mobilon alapból egymás alatt */
             align-items: center;
-            gap: 40px;
+            gap: 20px;
             width: 100%;
             max-width: 1100px;
-            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Desktop nézet */
+        @media (min-width: 1000px) {
+            .main-layout { flex-direction: row; align-items: flex-start; margin-top: 50px; }
+            body { align-items: center; }
         }
 
         #reaction-container {
-            width: 320px;
+            width: 100%;
+            max-width: 320px;
             display: flex;
-            flex-direction: column;
-            gap: 20px;
-            z-index: 5;
-            min-height: 200px;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            order: 2;
+        }
+
+        @media (min-width: 1000px) {
+            #reaction-container { flex-direction: column; order: 0; }
         }
 
         .container {
-            flex: 1;
-            max-width: 600px;
             width: 100%;
+            max-width: 500px;
             border: 4px solid #33ff33;
-            padding: 20px;
+            padding: 15px;
             background-color: #002200;
             box-shadow: 0 0 20px rgba(51, 255, 51, 0.5);
             position: relative;
             z-index: 1;
         }
 
-        @media (max-width: 1000px) {
-            body { align-items: flex-start; overflow-y: auto; }
-            .main-layout { flex-direction: column; padding-top: 20px; }
-            #reaction-container { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: center; order: 2; }
-            .container { order: 1; }
-        }
-
-        h1 { text-align: center; border-bottom: 4px double #33ff33; margin-top: 0; padding-bottom: 10px; font-size: 2rem; }
-        label { display: block; margin-bottom: 10px; font-size: 1.5rem; }
-        input[type=range] { width: 100%; cursor: pointer; accent-color: #33ff33; }
-        .slider-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 5px; }
+        h1 { text-align: center; border-bottom: 4px double #33ff33; margin: 0 0 15px 0; font-size: 1.8rem; }
+        label { display: block; margin-bottom: 5px; font-size: 1.3rem; }
+        .slider-labels { display: flex; justify-content: space-between; font-size: 0.7rem; margin-top: 5px; }
         
-        .radio-container { display: flex; align-items: center; gap: 10px; margin-top: 20px; border: 1px dashed #33ff33; padding: 10px; }
+        .radio-container { display: flex; align-items: center; gap: 8px; margin: 15px 0; border: 1px dashed #33ff33; padding: 8px; }
 
-        button { width: 100%; background-color: #33ff33; color: #000; border: none; padding: 15px; font-family: 'VT323', monospace; font-size: 1.8rem; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        button:active { background-color: #004400; color: #33ff33; }
+        button.gen-btn { width: 100%; background-color: #33ff33; color: #000; border: none; padding: 12px; font-family: 'VT323', monospace; font-size: 1.6rem; font-weight: bold; cursor: pointer; }
 
-        #output-area { margin-top: 30px; min-height: 120px; border: 2px solid #33ff33; padding: 15px; background-color: #000; font-size: 1.5rem; line-height: 1.2; }
+        #output-area { margin-top: 20px; min-height: 100px; border: 2px solid #33ff33; padding: 10px; background-color: #000; font-size: 1.3rem; line-height: 1.2; }
 
-        .reaction-icon { font-size: 5rem; text-shadow: 0 0 20px #33ff33; animation: pop 0.5s ease-out; }
-        .envelope { width: 60px; height: 40px; border: 3px solid #33ff33; position: relative; animation: bounce 0.5s ease-out; }
-        .envelope::after { content: "V"; position: absolute; top: 0; left: 20px; font-size: 1.5rem; }
-        .email-box { border: 2px solid #33ff33; background: #001100; padding: 12px; font-size: 1.4rem; box-shadow: 6px 6px 0px #004400; width: 100%; animation: open 0.4s ease-out; }
-        .email-header { border-bottom: 1px solid #33ff33; font-size: 0.9rem; margin-bottom: 5px; opacity: 0.7; }
-
+        .reaction-icon { font-size: 4rem; text-shadow: 0 0 20px #33ff33; animation: pop 0.5s ease-out; }
+        .email-box { border: 2px solid #33ff33; background: #001100; padding: 10px; font-size: 1.2rem; box-shadow: 4px 4px 0px #004400; width: 100%; animation: open 0.4s ease-out; }
+        
         @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
-        @keyframes bounce { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
         @keyframes open { 0% { transform: scaleY(0); } 100% { transform: scaleY(1); } }
         .blink { animation: blinker 1s linear infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
@@ -152,20 +147,19 @@
 </head>
 <body>
 
-<!-- Jogi Nyilatkozat -->
 <div id="disclaimer-overlay">
     <div class="disclaimer-content">
-        <h2>⚠️ JOGI ÉS ETIKAI NYILATKOZAT</h2>
+        <h2>⚠️ JOGI NYILATKOZAT</h2>
         <div class="disclaimer-text">
-            Ez az alkalmazás segít a modern irodai harcosoknak, hogy elegáns, stratégiai szinergiákkal átitatott szakzsargon mögé rejtsék, ha éppen semmi kedvük egy adott feladathoz.<br><br>
-            <strong>Kizárólag szórakoztatás céljából készült.</strong><br><br>
-            Szeretnénk leszögezni, hogy a valóságban:<br>
-            1. SOHA nem fordul elő, hogy egy dolgozó ki akarna bújni a munka alól.<br>
-            2. A vállalati szféra minden tagja mindig egyenesen, érthetően és őszintén kommunikál.<br>
-            3. Senki nem használ olyan szavakat, mint "szinergia" vagy "roadmap", ha nincs mögötte tartalom. ;)<br><br>
-            A szoftver használatából eredő hirtelen előléptetésekért vagy azonnali kirúgásokért felelősséget nem vállalunk!
+            Ez az alkalmazás segít a modern irodai harcosoknak, hogy stratégiai szinergiákkal átitatott szakzsargon mögé rejtsék, ha éppen semmi kedvük a munkához.<br><br>
+            <strong>KIZÁRÓLAG SZÓRAKOZTATÁSRA!</strong><br><br>
+            A valóságban:<br>
+            1. Senki nem akar kibújni a munka alól.<br>
+            2. Mindenki őszintén kommunikál.<br>
+            3. A "szinergia" szónak mindig van értelme. ;)<br><br>
+            Felelősséget semmiért nem vállalunk!
         </div>
-        <button class="accept-btn" onclick="acceptDisclaimer()">[ ELOLVASTAM ÉS ELFOGADOM ]</button>
+        <button class="accept-btn" onclick="acceptDisclaimer()">[ ELFOGADOM ÉS BELÉPEK ]</button>
     </div>
 </div>
 
@@ -173,11 +167,11 @@
     <div id="reaction-container"></div>
 
     <div class="container">
-        <h1>BULLSHIT-O-MATIC 1.6</h1>
+        <h1>BULLSHIT-O-MATIC 1.7</h1>
         
         <div class="control-group">
             <label>ATTITŰD:</label>
-            <input type="range" id="attitude" min="0" max="100" value="50">
+            <input type="range" id="attitude" min="0" max="100" value="50" style="width:100%">
             <div class="slider-labels">
                 <span>LOJÁLIS</span>
                 <span>CINIKUS</span>
@@ -186,22 +180,21 @@
 
         <div class="radio-container">
             <input type="checkbox" id="isBoss">
-            <label for="isBoss" style="margin:0; font-size: 1.2rem;">FELETTESNEK MONDOM</label>
+            <label for="isBoss" style="margin:0; font-size: 1.1rem;">FELETTESNEK MONDOM</label>
         </div>
 
-        <button onclick="startProcess()">GENERÁLÁS</button>
+        <button class="gen-btn" onclick="startProcess()">GENERÁLÁS</button>
 
         <div id="output-area">
-            <span id="text">VÁRAKOZÁS...</span><span class="blink">_</span>
+            <span id="text">RENDSZER KÉSZ...</span><span class="blink">_</span>
         </div>
-        <div style="font-size: 0.7rem; margin-top: 10px; opacity: 0.5; text-align: center;">
-            VIBE CODING GYAKORLAT v1.6
+        <div style="font-size: 0.6rem; margin-top: 10px; opacity: 0.4; text-align: center;">
+            VIBE CODING PRACTICE v1.7 - MOBILE OK
         </div>
     </div>
 </div>
 
 <script>
-    // Nyilatkozat bezárása
     function acceptDisclaimer() {
         document.getElementById('disclaimer-overlay').style.display = 'none';
     }
@@ -213,9 +206,9 @@
             end: ["mielőtt a megvalósítási fázisba lépünk.", "hogy maximalizáljuk a ROI-t.", "a fenntartható növekedés érdekében.", "az agilis módszertan alapelvei szerint."]
         },
         cynical: {
-            start: ["Ez a döglött akták tipikus esete,", "Úgy látom, megint sikerült feltalálni a spanyolviaszt,", "Ahelyett, hogy tényleges munkát végeznénk,", "Ebben a mentális mocsárban", "A kávégép mellett is megmondták,"],
-            middle: ["csak a gumicsontot rágjuk a semmiért", "éppen a fedélzeten rendezzük át a székeket a Titanic-on", "felesleges köröket futunk a bürokrácia útvesztőjében", "egy Excel-táblával próbáljuk megváltani a világot"],
-            end: ["úgyhogy hagyjuk is a fenébe.", "amihez se kedvem, se kompetenciám.", "majd szóljatok, ha van értelme is.", "inkább elmegyek táppénzre."]
+            start: ["Ez a döglött akták tipikus esete,", "Úgy látom, sikerült feltalálni a spanyolviaszt,", "Ahelyett, hogy munkát végeznénk,", "Ebben a mentális mocsárban", "A kávégép mellett is megmondták,"],
+            middle: ["csak a gumicsontot rágjuk a semmiért", "éppen a fedélzeten rendezzük át a székeket", "felesleges köröket futunk a bürokráciában", "egy Excel-táblával váltjuk meg a világot"],
+            end: ["úgyhogy hagyjuk is a fenébe.", "amihez se kedvem, se kompetenciám.", "majd szóljatok, ha van értelme.", "inkább elmegyek táppénzre."]
         },
         bossModifier: {
             cynicalReplacement: {
@@ -228,16 +221,14 @@
 
     const colleagueEmails = {
         loyalReaction: [
-            { from: "Kovács J.", msg: "MÉLYEBBRE NEM AKARSZ BENYALNI? MÁR BARNA A ZAKÓD!" },
-            { from: "Nagy B.", msg: "ÁTLÁTUNK RAJTAD, PAJTI. ENNYIRE KELL A BÓNUSZ?" },
-            { from: "Kiss A.", msg: "VIGYÁZZ, A FŐNÖK CIPŐJE MÁR TÚL FÉNYES!" },
-            { from: "Varga M.", msg: "NE FELEJTS EL LEVEGŐT VENNI KÉT NYALÁS KÖZÖTT!" }
+            { from: "Kovács J.", msg: "BARNA A ZAKÓD A BENYALÁSTÓL!" },
+            { from: "Nagy B.", msg: "ÁTLÁTUNK RAJTAD, PAJTI. KELL A BÓNUSZ?" },
+            { from: "Kiss A.", msg: "VIGYÁZZ, A FŐNÖK CIPŐJE MÁR TÚL FÉNYES!" }
         ],
         cynicalReaction: [
             { from: "Tóth L.", msg: "ZSENIÁLIS! EZT JÓL MEGKAPTA AZ ÖREG." },
-            { from: "Varga M.", msg: "VENDÉGEM VAGY EGY KÁVÉRA, SZÉP MUNKA VOLT!" },
-            { from: "H. Zoli", msg: "RESPECT! VÉGRE VALAKI KIMONDTA A TUTIT." },
-            { from: "Kata_HR", msg: "EZT A KIFOGÁST ÉN IS ELLOPOM!" }
+            { from: "Varga M.", msg: "VENDÉGEM VAGY EGY KÁVÉRA, SZÉP MUNKA!" },
+            { from: "H. Zoli", msg: "RESPECT! VÉGRE VALAKI KIMONDTA A TUTIT." }
         ]
     };
 
@@ -246,10 +237,9 @@
         const isBoss = document.getElementById('isBoss').checked;
         const output = document.getElementById('text');
         const reactionContainer = document.getElementById('reaction-container');
-        
         reactionContainer.innerHTML = ""; 
+        
         let pool;
-
         if (isBoss) {
             pool = (attitude > 50) ? data.bossModifier.cynicalReplacement : data.loyal;
         } else {
@@ -270,12 +260,11 @@
             if (i < result.length) {
                 output.innerText += result.charAt(i);
                 i++;
-                setTimeout(type, 15);
+                setTimeout(type, 20);
             } else {
                 setTimeout(() => {
-                    if (isBoss) {
-                        triggerEmails(attitude > 50 ? "cynicalReaction" : "loyalReaction");
-                    } else {
+                    if (isBoss) triggerEmails(attitude > 50 ? "cynicalReaction" : "loyalReaction");
+                    else {
                         if (attitude > 60) triggerIcons("👏");
                         else if (attitude < 40) triggerIcons("👎");
                     }
@@ -287,26 +276,14 @@
 
     function triggerEmails(type) {
         const container = document.getElementById('reaction-container');
-        const allMessages = [...colleagueEmails[type]];
-        const selected = [];
-        for (let j = 0; j < 3; j++) {
-            const index = Math.floor(Math.random() * allMessages.length);
-            selected.push(allMessages.splice(index, 1)[0]);
-        }
-        
-        selected.forEach((mail, index) => {
+        const messages = colleagueEmails[type].slice(0, 3);
+        messages.forEach((mail, index) => {
             setTimeout(() => {
-                const env = document.createElement('div');
-                env.className = 'envelope';
-                container.appendChild(env);
-                setTimeout(() => {
-                    env.remove();
-                    const box = document.createElement('div');
-                    box.className = 'email-box';
-                    box.innerHTML = `<div class="email-header">MAIL: ${mail.from}</div><div>${mail.msg}</div>`;
-                    container.appendChild(box);
-                }, 600);
-            }, index * 1200);
+                const box = document.createElement('div');
+                box.className = 'email-box';
+                box.innerHTML = `<div style="font-size:0.7rem;opacity:0.6">MAIL FROM: ${mail.from}</div><div>${mail.msg}</div>`;
+                container.appendChild(box);
+            }, index * 800);
         });
     }
 
@@ -325,8 +302,4 @@
 
 </body>
 </html>
-</script>
 
-</body>
-
-</html>
