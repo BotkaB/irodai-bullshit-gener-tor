@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BULLSHIT GENERATOR 1.5 - RESPONSIVE RETRO</title>
+    <title>BULLSHIT GENERATOR 1.6 - DISCLAIMER EDITION</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
@@ -23,19 +23,70 @@
             text-transform: uppercase;
         }
 
-        /* CRT Monitor effekt */
+        /* CRT Monitor effekt - MINDEN felett */
         body::before {
             content: " ";
             display: block;
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 10;
+            z-index: 1000;
             background-size: 100% 2px, 3px 100%;
             pointer-events: none;
         }
 
-        /* Elrendezés wrapper */
+        /* Jogi Nyilatkozat Overlay */
+        #disclaimer-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .disclaimer-content {
+            max-width: 700px;
+            border: 2px solid #33ff33;
+            padding: 30px;
+            background: #001100;
+            box-shadow: 0 0 30px rgba(51, 255, 51, 0.3);
+            text-align: left;
+        }
+
+        .disclaimer-content h2 {
+            color: #fff;
+            text-align: center;
+            border-bottom: 2px solid #33ff33;
+            margin-top: 0;
+            padding-bottom: 10px;
+        }
+
+        .disclaimer-text {
+            font-size: 1.3rem;
+            line-height: 1.4;
+            margin: 20px 0;
+        }
+
+        .accept-btn {
+            display: block;
+            width: 100%;
+            background: #33ff33;
+            color: #000;
+            border: none;
+            padding: 15px;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .accept-btn:hover { background: #fff; }
+
+        /* Fő elrendezés */
         .main-layout {
             display: flex;
             flex-direction: row;
@@ -67,59 +118,25 @@
             z-index: 1;
         }
 
-        /* Reakciók mobil optimalizálása */
         @media (max-width: 1000px) {
             body { align-items: flex-start; overflow-y: auto; }
             .main-layout { flex-direction: column; padding-top: 20px; }
-            #reaction-container { 
-                width: 100%; 
-                flex-direction: row; 
-                flex-wrap: wrap; 
-                justify-content: center;
-                order: 2; /* A szöveg után jelenjen meg mobilon */
-            }
+            #reaction-container { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: center; order: 2; }
             .container { order: 1; }
         }
 
-        /* Elemek stílusa */
         h1 { text-align: center; border-bottom: 4px double #33ff33; margin-top: 0; padding-bottom: 10px; font-size: 2rem; }
         label { display: block; margin-bottom: 10px; font-size: 1.5rem; }
         input[type=range] { width: 100%; cursor: pointer; accent-color: #33ff33; }
         .slider-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 5px; }
         
-        .radio-container { 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            margin-top: 20px; 
-            border: 1px dashed #33ff33; 
-            padding: 10px; 
-        }
+        .radio-container { display: flex; align-items: center; gap: 10px; margin-top: 20px; border: 1px dashed #33ff33; padding: 10px; }
 
-        button { 
-            width: 100%; 
-            background-color: #33ff33; 
-            color: #000; 
-            border: none; 
-            padding: 15px; 
-            font-family: 'VT323', monospace; 
-            font-size: 1.8rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            margin-top: 20px; 
-        }
+        button { width: 100%; background-color: #33ff33; color: #000; border: none; padding: 15px; font-family: 'VT323', monospace; font-size: 1.8rem; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        button:active { background-color: #004400; color: #33ff33; }
 
-        #output-area { 
-            margin-top: 30px; 
-            min-height: 120px; 
-            border: 2px solid #33ff33; 
-            padding: 15px; 
-            background-color: #000; 
-            font-size: 1.5rem; 
-            line-height: 1.2; 
-        }
+        #output-area { margin-top: 30px; min-height: 120px; border: 2px solid #33ff33; padding: 15px; background-color: #000; font-size: 1.5rem; line-height: 1.2; }
 
-        /* Ikonok és Emailek */
         .reaction-icon { font-size: 5rem; text-shadow: 0 0 20px #33ff33; animation: pop 0.5s ease-out; }
         .envelope { width: 60px; height: 40px; border: 3px solid #33ff33; position: relative; animation: bounce 0.5s ease-out; }
         .envelope::after { content: "V"; position: absolute; top: 0; left: 20px; font-size: 1.5rem; }
@@ -135,11 +152,28 @@
 </head>
 <body>
 
+<!-- Jogi Nyilatkozat -->
+<div id="disclaimer-overlay">
+    <div class="disclaimer-content">
+        <h2>⚠️ JOGI ÉS ETIKAI NYILATKOZAT</h2>
+        <div class="disclaimer-text">
+            Ez az alkalmazás segít a modern irodai harcosoknak, hogy elegáns, stratégiai szinergiákkal átitatott szakzsargon mögé rejtsék, ha éppen semmi kedvük egy adott feladathoz.<br><br>
+            <strong>Kizárólag szórakoztatás céljából készült.</strong><br><br>
+            Szeretnénk leszögezni, hogy a valóságban:<br>
+            1. SOHA nem fordul elő, hogy egy dolgozó ki akarna bújni a munka alól.<br>
+            2. A vállalati szféra minden tagja mindig egyenesen, érthetően és őszintén kommunikál.<br>
+            3. Senki nem használ olyan szavakat, mint "szinergia" vagy "roadmap", ha nincs mögötte tartalom. ;)<br><br>
+            A szoftver használatából eredő hirtelen előléptetésekért vagy azonnali kirúgásokért felelősséget nem vállalunk!
+        </div>
+        <button class="accept-btn" onclick="acceptDisclaimer()">[ ELOLVASTAM ÉS ELFOGADOM ]</button>
+    </div>
+</div>
+
 <div class="main-layout">
     <div id="reaction-container"></div>
 
     <div class="container">
-        <h1>BULLSHIT-O-MATIC 1.5</h1>
+        <h1>BULLSHIT-O-MATIC 1.6</h1>
         
         <div class="control-group">
             <label>ATTITŰD:</label>
@@ -160,10 +194,18 @@
         <div id="output-area">
             <span id="text">VÁRAKOZÁS...</span><span class="blink">_</span>
         </div>
+        <div style="font-size: 0.7rem; margin-top: 10px; opacity: 0.5; text-align: center;">
+            VIBE CODING GYAKORLAT v1.6
+        </div>
     </div>
 </div>
 
 <script>
+    // Nyilatkozat bezárása
+    function acceptDisclaimer() {
+        document.getElementById('disclaimer-overlay').style.display = 'none';
+    }
+
     const data = {
         loyal: {
             start: ["A stratégiai célok mentén", "A szinergiák kihasználása érdekében", "Az operatív hatékonyságot szem előtt tartva", "A roadmap prioritásait elemezve", "A vállalati vízióhoz illeszkedve"],
@@ -282,4 +324,9 @@
 </script>
 
 </body>
+</html>
+</script>
+
+</body>
+
 </html>
